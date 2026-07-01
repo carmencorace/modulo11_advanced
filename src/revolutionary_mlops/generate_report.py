@@ -60,3 +60,7 @@ def main() -> None:
     reports_dir = Path("reports")
     reports_dir.mkdir(exist_ok=True)
     (reports_dir / "index.html").write_text(html, encoding="utf-8")
+
+
+if __name__ == "__main__":
+    main()
