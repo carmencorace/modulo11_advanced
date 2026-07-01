@@ -1,6 +1,7 @@
 from pathlib import Path
 import sys
 
+required_metrics = ["accuracy", "precision", "recall"]
 
 def read_metrics(path: Path) -> dict[str, float]:
     """
