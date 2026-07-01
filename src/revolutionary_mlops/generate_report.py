@@ -3,6 +3,7 @@ import sys
 
 required_metrics = ["accuracy", "precision", "recall"]
 
+
 def read_metrics(path: Path) -> dict[str, float]:
     """
     Función que lee las métricas de un archivo de texto.
