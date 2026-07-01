@@ -10,9 +10,14 @@ def read_metrics(path: Path) -> dict[str, float]:
     """
     metrics = {}
     for line in path.read_text(encoding="utf-8").splitlines():
-        if "=" not in line:
+        if ":" in line:
+            name, value = line.split(":", maxsplit=1)
+        elif "=" in line:
+            name, value = line.split("=", maxsplit=1)
+        else:
             continue
-        name, value = line.split("=", maxsplit=1)
+        name = name.strip()
+        value = value.strip()
         if name in required_metrics:
             metrics[name] = float(value)
     return metrics
