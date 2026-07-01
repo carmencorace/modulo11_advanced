@@ -40,7 +40,10 @@ jobs:
         run: |
             uv run -m revolutionary_mlops train | tee train_output.txt
             MODEL_ID=$(grep "model_id=" train_output.txt | cut -d "=" -f 2)
+            echo "MODEL_ID=$MODEL_ID" >> "$GITHUB_ENV"
             echo "----- train_output.txt -----"
+            cat train_output.txt
+            echo "MODEL_ID=$MODEL_ID"
 
       - name: Validate model
         run: |
