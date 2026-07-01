@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: '3.14' 
 
-      - uses: astral-sh/setup-uv@vX
+      - uses: astral-sh/setup-uv@v6
 
       - name: Install dependencies
         run: uv sync
