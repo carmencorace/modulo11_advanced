@@ -1,0 +1,60 @@
+name: Model CI/CD Pipeline
+
+
+on: 
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs: 
+  validate-model: 
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14' 
+
+      - uses: astral-sh/setup-uv@vX
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Ruff format
+        run: uv run ruff format --check .
+
+      - name: Ruff lint 
+        run: uv run ruff check . 
+
+      - name: Type checking
+        run: uv run ty check .
+
+      - name: Run tests
+        run: uv run pytest 
+
+      - name: Train model
+        run: uv run -m revolutionary_mlops train | tee train_output.txt
+         MODEL_ID=$(grep "model_id=" train_output.txt | cut -d "=" -f 2) 
+         echo "MODEL_ID=$MODEL_ID" >> "$GITHUB_ENV"
+
+      - name: Validate model
+        run: uv run -m revolutionary_mlops validate "$MODEL_ID" | tee validation_output.txt
+
+      - name: Check validation metrics
+        run: uv run python scripts/check_metrics.py validation_output.txt
+
+      - name: Generate HTML report
+        run: uv run python scripts/generate_report.py validation_output.txt "$MODEL_ID"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: reports
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
