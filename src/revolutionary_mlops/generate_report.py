@@ -1,9 +1,10 @@
-from pathlib import Path  
+from pathlib import Path
 import sys
+
 
 def read_metrics(path: Path) -> dict[str, float]:
     """
-    Función que lee las métricas de un archivo de texto. 
+    Función que lee las métricas de un archivo de texto.
     """
     metrics = {}
     for line in path.read_text(encoding="utf-8").splitlines():
@@ -15,11 +16,12 @@ def read_metrics(path: Path) -> dict[str, float]:
     return metrics
 
 
+def main() -> None:
+    if len(sys.argv) != 3:
+        raise SystemExit(
+            "Usage:  python scripts/generate_report.py validation_output.txt MODEL_ID"
+        )
 
-def main() -> None: 
-    if len(sys.argv) != 3: 
-        raise SystemExit("Usage:  python scripts/generate_report.py validation_output.txt MODEL_ID")
-    
     metrics_path = Path(sys.argv[1])
     model_id = sys.argv[2]
     metrics = read_metrics(metrics_path)
@@ -47,13 +49,7 @@ def main() -> None:
             </body>
             </html>
         """
-    
+
     reports_dir = Path("reports")
     reports_dir.mkdir(exist_ok=True)
-    (reports_dir / "index.html").write_text(html,encoding="utf-8")
-    
-
-    
-
-
-
+    (reports_dir / "index.html").write_text(html, encoding="utf-8")

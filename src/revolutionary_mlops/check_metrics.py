@@ -7,7 +7,7 @@ required_metrics = ["accuracy", "precision", "recall"]
 
 def read_metrics(path: Path) -> dict[str, float]:
     """
-    Función que lee las métricas de un archivo de texto. 
+    Función que lee las métricas de un archivo de texto.
     """
     metrics = {}
     for line in path.read_text(encoding="utf-8").splitlines():
@@ -21,34 +21,30 @@ def read_metrics(path: Path) -> dict[str, float]:
 
 def main() -> None:
     """
-    Función principal que ejecuta la validación de las métricas. 
+    Función principal que ejecuta la validación de las métricas.
     """
     if len(sys.argv) != 2:
         raise SystemExit("Usage: python scripts/check_metrics.py validation_output.txt")
 
-
     metrics_path = Path(sys.argv[1])
     metrics = read_metrics(metrics_path)
 
-
     missing_metrics = []
-    for name in required_metrics: 
-        if name not in metrics: 
-            missing_metrics.append(name)   
+    for name in required_metrics:
+        if name not in metrics:
+            missing_metrics.append(name)
     if missing_metrics:
         raise SystemExit(f"Missing metrics: {', '.join(missing_metrics)}")
-
 
     failed_metrics = {}
     for name, value in metrics.items():
         if value < min_score:
             failed_metrics[name] = value
-    if failed_metrics: 
+    if failed_metrics:
         for name, value in failed_metrics.items():
             print(f"{name}={value:.3f} is below {min_score:.2f}")
-        raise SystemExit(1) 
+        raise SystemExit(1)
 
-   
     print("All validation metrics passed:")
     for name in required_metrics:
         print(f"{name}={metrics[name]:.3f}")
