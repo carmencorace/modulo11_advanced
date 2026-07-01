@@ -1,6 +1,5 @@
 name: Model CI/CD Pipeline
 
-
 on: 
   push:
   pull_request:
