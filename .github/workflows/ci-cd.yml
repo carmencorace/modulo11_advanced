@@ -37,15 +37,13 @@ jobs:
         run: uv run pytest 
 
       - name: Train model
-        run: uv run -m revolutionary_mlops train | tee train_output.txt
-         MODEL_ID=$(grep "model_id=" train_output.txt | cut -d "=" -f 2) 
-         echo "MODEL_ID=$MODEL_ID" >> "$GITHUB_ENV"
+        run: |
+            uv run -m revolutionary_mlops train | tee train_output.txt
+            MODEL_ID=$(grep "model_id=" train_output.txt | cut -d "=" -f 2)
+            echo "----- train_output.txt -----"
 
       - name: Validate model
-        run: |
-          uv run -m revolutionary_mlops validate "$MODEL_ID" | tee validation_output.txt
-          echo "----- validation_output.txt -----"
-          cat validation_output.txt
+        run: uv run -m revolutionary_mlops validate "$MODEL_ID" | tee validation_output.txt
 
       - name: Check validation metrics
         run: uv run python src/revolutionary_mlops/check_metrics.py validation_output.txt
