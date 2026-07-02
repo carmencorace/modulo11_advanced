@@ -47,6 +47,8 @@ jobs:
       - name: Validate model
         run: |
             uv run -m revolutionary_mlops validate "$MODEL_ID" 2>&1 | tee validation_output.txt
+            echo "----- validation_output.txt -----" 
+            cat validation_output.txt
           
 
       - name: Check validation metrics
