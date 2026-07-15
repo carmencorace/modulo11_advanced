@@ -42,6 +42,7 @@ def main() -> None:
             <body>
 
             <h1>Model Validation Report</h1>
+            <h2>Testing CI/CD injection</>
 
             <p><strong>Model ID:</strong> {model_id}</p>
 
